@@ -4,14 +4,19 @@ LABEL version="1.0"
 LABEL description="To Do List application builder"
 
 # ENV REACT_APP_API_HOST=http://localhost:3000
-ENV REACT_APP_API_HOST=""
+ENV REACT_APP_API_HOST="http://localhost:8080"
 
-USER 0
+RUN chgrp 0 /tmp/todo-frontend && \
+    chmod g=u /tmp/todo-frontend
+
+USER 1001
 
 COPY . /tmp/todo-frontend
+RUN chgrp 0 /tmp/todo-frontend && \
+    chmod g=u /tmp/todo-frontend
 
-RUN cd /tmp/todo-frontend
-RUN npm install
+RUN cd /tmp/todo-frontend && \
+RUN npm install && \
 RUN npm run build
 
 # https://github.com/sclorg/nginx-container
